@@ -1,0 +1,19 @@
+$color-map: (
+  primary: #1976D2, 
+  success: #72BF24, 
+  warning: #FFAD0F, 
+  danger: #E52D27, 
+  info: #909399
+);
+
+@mixin sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
