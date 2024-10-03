@@ -119,9 +119,9 @@ const id = `field-${Math.round(Math.random() * 1e5)}`;
 
   &__message {
     display: flex;
-    margin-top: 4px;
     font-size: 0.75rem;
     color: #6b7280;
+    margin-top: 4px;
   }
 
   &--error &__message {

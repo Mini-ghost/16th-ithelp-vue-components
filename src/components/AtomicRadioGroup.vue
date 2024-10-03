@@ -1,72 +1,63 @@
+<script lang="ts">
+interface AtomicRadioContext {
+  modelValue: Ref<any>;
+  props: AtomicRadioGroupProps;
+};
+
+export const RADIO_INJECT_KEY: InjectionKey<AtomicRadioContext> = Symbol();
+</script>
 
 <script setup lang="ts">
-import { cloneVNode, computed, Fragment, h } from 'vue';
+import { computed, provide, ref } from 'vue';
 
-import type { Slot } from 'vue';
+import type { InjectionKey, Ref } from 'vue';
+import useControlled from '~/composables/useControlled';
 
-import resolveSlotChildren from '~/helpers/resolveSlotChildren';
-
-interface AtomicRadioGroupProps {
+export interface AtomicRadioGroupProps {
   modelValue?: any;
   name?: string;
-  label?: string;
   labelPlacement?: 'top' | 'left' | 'right' | 'bottom';
   hideLabel?: boolean;
   color?: 'primary' | 'success' | 'warning' | 'danger' | 'info';
   disabled?: boolean;
+  error?: boolean;
 }
 
 interface AtomicRadioGroupEmits {
-  (type: 'update:modelValue', event: any): void;
-}
-
-interface AtomicRadioGroupSlots {
-  default?: () => ReturnType<Slot>;
+  (event: 'update:modelValue', value: any): void;
 }
 
 const props = withDefaults(defineProps<AtomicRadioGroupProps>(), {
   modelValue: undefined,
   name: undefined,
-  label: undefined,
-  labelPlacement: 'left',
-  color: 'primary',
-  trueValue: undefined,
-  falseValue: undefined,
+  labelPlacement: undefined,
+  color: undefined,
 });
 
 const emit = defineEmits<AtomicRadioGroupEmits>();
 
-const slots = defineSlots<AtomicRadioGroupSlots>();
+const isControlled = useControlled(props, 'modelValue');
 
+const modelValueLocal = ref(props.modelValue ?? false);
 const modelValueWritable = computed({
   get() {
-    return props.modelValue;
+    return isControlled.value
+      ? props.modelValue!
+      : modelValueLocal.value;
   },
   set(value) {
     emit('update:modelValue', value);
+    modelValueLocal.value = value;
   },
 });
 
-const children = computed(() => resolveSlotChildren(slots.default?.()));
-
-const DefaultVNode = computed(() => {
-  const nodes = children.value;
-  if (!nodes) return;
-
-  const cloned = nodes.map(node =>
-    cloneVNode(node, {
-      ...props,
-      ...node.props,
-      modelValue: modelValueWritable.value,
-      'onUpdate:modelValue': (value: any) => (modelValueWritable.value = value),
-    }),
-  );
-
-  return h(Fragment, cloned);
+provide(RADIO_INJECT_KEY, {
+  modelValue: modelValueWritable,
+  props,
 });
 </script>
 
 <template>
-  <component :is="DefaultVNode" />
+  <slot name="default" />
 </template>
 

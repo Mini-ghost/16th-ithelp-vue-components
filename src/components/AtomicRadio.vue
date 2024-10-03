@@ -1,7 +1,18 @@
+<script lang="ts">
+type CombinedKey =
+  | 'name'
+  | 'labelPlacement'
+  | 'hideLabel'
+  | 'color'
+  | 'disabled'
+  | 'error';
+</script>
+
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, inject } from 'vue';
 
 import AtomicFormLabelField from './AtomicFormLabelField.vue';
+import { RADIO_INJECT_KEY } from './AtomicRadioGroup.vue';
 
 interface AtomicRadioProps {
   modelValue?: any;
@@ -11,11 +22,13 @@ interface AtomicRadioProps {
   labelPlacement?: 'top' | 'left' | 'right' | 'bottom';
   hideLabel?: boolean;
   color?: 'primary' | 'success' | 'warning' | 'danger' | 'info';
+  message?: string;
   disabled?: boolean;
+  error?: boolean;
 }
 
 interface AtomicRadioEmits {
-  (type: 'update:modelValue', value: any): void;
+  (event: 'update:modelValue', value: any): void;
 }
 
 const props = withDefaults(defineProps<AtomicRadioProps>(), {
@@ -23,21 +36,45 @@ const props = withDefaults(defineProps<AtomicRadioProps>(), {
   value: undefined,
   name: undefined,
   label: undefined,
-  labelPlacement: 'right',
-  color: 'primary',
-  trueValue: undefined,
-  falseValue: undefined,
+  labelPlacement: undefined,
+  color: undefined,
+  message: undefined,
 });
 
 const emit = defineEmits<AtomicRadioEmits>();
 
+const context = inject(RADIO_INJECT_KEY, null);
+
 const modelValueWritable = computed({
   get() {
+    if (context) return context.modelValue.value;
     return props.modelValue;
   },
   set(value) {
+    if (context) {
+      context.modelValue.value = value;
+      return;
+    }
+
     emit('update:modelValue', value);
   },
+});
+
+const marge = <Key extends CombinedKey>(key: Key): AtomicRadioProps[Key] => {
+  return props[key] ?? context!.props[key];
+};
+
+const mergedProps = computed(() => {
+  if (!context) return props;
+
+  return {
+    name: marge('name'),
+    labelPlacement: marge('labelPlacement') ?? 'right',
+    hideLabel: marge('hideLabel'),
+    color: marge('color') ?? 'primary',
+    disabled: marge('disabled'),
+    error: marge('error'),
+  };
 });
 </script>
 
@@ -45,18 +82,18 @@ const modelValueWritable = computed({
   <AtomicFormLabelField
     class="atomic-radio"
     :class="{
-      'atomic-radio--disabled': disabled,
-      [`atomic-radio--${color}`]: !!color,
+      'atomic-radio--disabled': mergedProps.disabled,
+      [`atomic-radio--${mergedProps.color}`]: !!mergedProps.color,
     }"
-    :hide-label="hideLabel"
+    :hide-label="mergedProps.hideLabel"
     :label="label"
-    :label-placement="labelPlacement"
+    :label-placement="mergedProps.labelPlacement"
   >
     <input
       v-model="modelValueWritable"
       class="atomic-radio__input"
-      :disabled="disabled"
-      :name="name"
+      :disabled="mergedProps.disabled"
+      :name="mergedProps.name"
       type="radio"
       :value="value"
     >

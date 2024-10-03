@@ -1,14 +1,14 @@
 <script setup lang="ts" generic="Value extends string | number | symbol, Context">
 import { computed, defineComponent, ref, withDirectives } from 'vue';
 
-import type { Slot } from 'vue';
-import type { ComponentProps } from 'vue-component-type-helpers';
-
 import AtomicPopover from '~/components/AtomicPopover.vue';
-import findFirstLegitChild from '~/helpers/findFirstLegitChild';
 import { moveFocus, nextItem, previousItem } from '~/utils/dom';
 import isFunction from '~/utils/isFunction';
 import noop from '~/utils/noop';
+
+import type { Slot } from 'vue';
+import type { ComponentProps } from 'vue-component-type-helpers';
+import findFirstLegitChild from '~/helpers/findFirstLegitChild';
 
 type AtomicPopoverProps = ComponentProps<typeof AtomicPopover>;
 
@@ -21,30 +21,11 @@ interface AtomicDropdownItem {
 }
 
 interface AtomicDropdownProps {
-  /**
-   * 下拉選單項目
-   */
   items: AtomicDropdownItem[];
-
-  /**
-   * 觸發方式
-   */
-  trigger?: 'click' | 'hover';
-
-  /**
-   * 顯示位置
-   */
+  trigger?: 'click' | 'hover'
   placement?: AtomicPopoverProps['placement'];
-
-  /**
-   * 位移距離
-   */
   offset?: AtomicPopoverProps['offset'];
-
-  /**
-   * 是否禁用
-   */
-  disabled?: boolean;
+  disabled?: boolean
 }
 
 interface AtomicPopoverSlots {
@@ -205,10 +186,10 @@ const onMenuKeydown = (event: KeyboardEvent) => {
 @use 'sass:map';
 
 .atomic-dropdown {
+  background-color: white;
   overflow-y: auto;
   padding: 4px;
   max-height: 180px;
-  background-color: white;
   border-radius: 4px;
   box-shadow: 0 2px 4px 1px rgba(0, 0, 0, 0.1);
 

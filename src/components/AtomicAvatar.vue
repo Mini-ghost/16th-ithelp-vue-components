@@ -82,9 +82,7 @@ if (typeof window !== 'undefined') {
   watch(
     () => props.src,
     value => {
-      if (!value) {
-        return (error.value = false);
-      }
+      if (!value) { return error.value = false; }
 
       const img = new Image();
       img.onload = () => (error.value = false);
@@ -143,6 +141,7 @@ if (typeof window !== 'undefined') {
   background-color: #f3f4f6;
   border-radius: var(--avatar-rounded);
   user-select: none;
+  overflow: hidden;
 
   &--small {
     --avatar-size: 24px;

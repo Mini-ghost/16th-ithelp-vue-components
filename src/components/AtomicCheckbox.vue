@@ -1,8 +1,6 @@
 <script setup lang="ts" generic="T extends any">
 import { computed, onMounted, onUpdated, ref, shallowRef, watch } from 'vue';
 
-import { useCheckboxContext } from './AtomicCheckboxGroup.vue';
-
 import AtomicFormLabelField, {
   useFormLabelFieldProps,
 } from '~/components/AtomicFormLabelField.vue';
@@ -26,7 +24,8 @@ interface AtomicCheckboxProps {
 }
 
 interface AtomicCheckboxEmits {
-  (type: 'update:modelValue', event: T): void;
+  (event: 'update:modelValue', value: T): void;
+  (event: 'change', value: Event): void;
 }
 
 const props = withDefaults(defineProps<AtomicCheckboxProps>(), {
@@ -43,12 +42,10 @@ const props = withDefaults(defineProps<AtomicCheckboxProps>(), {
 
 const emit = defineEmits<AtomicCheckboxEmits>();
 
-const context = useCheckboxContext();
-
 const inputRef = ref<HTMLInputElement>();
 
 const filedProps = useFormLabelFieldProps(() => ({
-  ...(context?.props ?? props),
+  ...props,
   label: props.label,
 }));
 
@@ -57,29 +54,21 @@ const isControlled = useControlled(props, 'modelValue');
 const modelValueLocal = shallowRef(props.modelValue ?? false);
 const modelValueWritable = computed({
   get() {
-    return context
-      ? context.modelValue.value
-      : isControlled.value
+    return isControlled.value
       ? props.modelValue!
       : modelValueLocal.value;
   },
   set(value) {
-    if (context) {
-      context.modelValue.value = value;
-      return;
-    }
-
     emit('update:modelValue', value);
     modelValueLocal.value = value;
   },
 });
 
 const inputAttrs = computed(() => {
-  const source = context?.props ?? props;
   const { value, trueValue, falseValue } = props;
   return {
-    name: source.name,
-    disabled: source.disabled,
+    name: props.name,
+    disabled: props.disabled,
     indeterminate: props.indeterminate,
     value: value !== undefined ? value : '',
     ...(!isNullOrUndefined(trueValue) ? { 'true-value': trueValue } : {}),
@@ -91,16 +80,14 @@ const isChecked = ref(false);
 const isIndeterminate = ref(!!props.indeterminate);
 
 const rootClass = computed(() => {
-  const source = context?.props ?? props;
-  const disabled = source.disabled;
-  const color = source.color;
+  const { color, disabled } = props;
   return {
     'atomic-checkbox--disabled': disabled,
     [`atomic-checkbox--${color}`]: !!color,
   };
 });
 
-const onChange = () => {
+const handleSyncChecked = () => {
   const input = inputRef.value;
   isChecked.value = input?.checked ?? false;
   isIndeterminate.value = input?.indeterminate ?? false;
@@ -114,15 +101,12 @@ watch(
   { immediate: true },
 );
 
-watch(
-  () => props.modelValue,
-  value => {
-    modelValueLocal.value = value;
-  },
-);
+watch(() => props.modelValue, value => {
+  modelValueLocal.value = value;
+});
 
-onMounted(onChange);
-onUpdated(onChange);
+onMounted(handleSyncChecked);
+onUpdated(handleSyncChecked);
 </script>
 
 <template>
@@ -144,6 +128,7 @@ onUpdated(onChange);
       v-bind="inputAttrs"
       class="atomic-checkbox__input"
       type="checkbox"
+      @change="emit('change', $event)"
       @click.stop
     >
 

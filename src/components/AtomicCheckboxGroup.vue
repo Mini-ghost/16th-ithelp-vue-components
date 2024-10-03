@@ -1,24 +1,11 @@
-<script lang="ts">
-const AtomicCheckboxContext: InjectionKey<{
-  modelValue: Ref<any>;
-  props: AtomicCheckboxGroupProps;
-}> = Symbol();
-
-export function useCheckboxContext() {
-  const context = inject(AtomicCheckboxContext, null);
-  return context;
-}
-</script>
-
 <script setup lang="ts">
-import { computed, inject, provide, ref } from 'vue';
+import { cloneVNode, computed, Fragment, h } from 'vue';
 
-import type { InjectionKey, Ref } from 'vue';
-
-import useControlled from '~/composables/useControlled';
+import type { Slot } from 'vue';
+import resolveSlotChildren from '~/helpers/resolveSlotChildren';
 
 export interface AtomicCheckboxGroupProps {
-  modelValue?: any[];
+  modelValue: any[];
   name?: string;
   labelPlacement?: 'top' | 'left' | 'right' | 'bottom';
   hideLabel?: boolean;
@@ -29,7 +16,11 @@ export interface AtomicCheckboxGroupProps {
 }
 
 interface AtomicCheckboxGroupEmits {
-  (type: 'update:modelValue', value: any): void;
+  (event: 'update:modelValue', value: any): void;
+}
+
+interface AtomicCheckboxGroupSlots {
+  default?: () => ReturnType<Slot>;
 }
 
 const props = withDefaults(defineProps<AtomicCheckboxGroupProps>(), {
@@ -43,25 +34,36 @@ const props = withDefaults(defineProps<AtomicCheckboxGroupProps>(), {
 
 const emit = defineEmits<AtomicCheckboxGroupEmits>();
 
-const isControlled = useControlled(props, 'modelValue');
+const slots = defineSlots<AtomicCheckboxGroupSlots>();
 
-const modelValueLocal = ref(props.modelValue);
 const modelValueWritable = computed({
   get() {
-    return isControlled.value ? props.modelValue : modelValueLocal.value;
+    return props.modelValue;
   },
   set(value) {
     emit('update:modelValue', value);
-    modelValueLocal.value = value;
   },
 });
 
-provide(AtomicCheckboxContext, {
-  modelValue: modelValueWritable,
-  props,
+const children = computed(() => resolveSlotChildren(slots.default?.()));
+
+const DefaultVNode = computed(() => {
+  const nodes = children.value;
+  if (!nodes) return;
+
+  const cloned = nodes.map(node =>
+    cloneVNode(node, {
+      ...props,
+      ...node.props,
+      modelValue: modelValueWritable.value,
+      'onUpdate:modelValue': (value: any) => (modelValueWritable.value = value),
+    }),
+  );
+
+  return h(Fragment, cloned);
 });
 </script>
 
 <template>
-  <slot name="default" />
+  <component :is="DefaultVNode" />
 </template>

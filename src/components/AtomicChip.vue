@@ -1,7 +1,13 @@
+<script lang="ts">
+const THEME_COLORS = ['primary', 'success', 'warning', 'danger', 'info'];
+</script>
+
 <script setup lang="ts">
 import { computed } from 'vue';
 
 import CloseSvg from '~/assets/svg/close.svg?component';
+// import hexToRgb from '~/utils/hexToRgb';
+import toExpandedHex from '~/utils/toExpandedHex';
 
 type LiteralUnion<T> = T | (string & {});
 
@@ -29,12 +35,25 @@ const props = withDefaults(defineProps<AtomicChipProps>(), {
 
 const emit = defineEmits<AtomicChipEmits>();
 
+const isThemeColor = computed(() => {
+  return THEME_COLORS.includes(props.color);
+});
+
 const BASIC_CLASS = 'atomic-chip';
 const rootClass = computed(() => [
   `${BASIC_CLASS}--${props.size}`,
-  `${BASIC_CLASS}--${props.color}`,
   `${BASIC_CLASS}--${props.variant}`,
+  isThemeColor.value ? `${BASIC_CLASS}--${props.color}` : undefined,
 ]);
+
+const rootStyle = computed(() =>
+  !isThemeColor.value
+    ? {
+        '--chip-color': props.color,
+        '--chip-color-second': `${toExpandedHex(props.color)}1A`,
+      }
+    : null,
+);
 </script>
 
 <template>
@@ -42,6 +61,7 @@ const rootClass = computed(() => [
     :is="as"
     class="atomic-chip"
     :class="rootClass"
+    :style="rootStyle"
   >
     <span v-if="$slots.prepend">
       <slot name="prepend" />
@@ -94,12 +114,11 @@ const rootClass = computed(() => [
     padding: 2px 8px;
   }
 
+  // color
   @each $color, $value in $color-map {
     &--#{$color} {
-      $second: rgba($value, 0.1);
-
       --chip-color: #{$value};
-      --chip-color-second: #{$second};
+      --chip-color-second: #{rgba($value, 0.1)};
     }
   }
 

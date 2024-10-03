@@ -25,7 +25,6 @@ type OrientationKey = keyof Orientation;
 
 <script setup lang="ts">
 import { computed, onUpdated, ref } from 'vue';
-
 import useResizeObserver from '~/composables/useResizeObserver';
 
 interface AtomicScrollbarProps {
@@ -67,7 +66,7 @@ const onThumbPointerdown = (
   if (event.ctrlKey || event.button !== 0) return;
   if (!viewportRef.value) return;
 
-  const { page, scroll } = (currentOrientation = ORIENTATION_MAP[orientation]);
+  const { page, scroll } = currentOrientation = ORIENTATION_MAP[orientation];
 
   mousePosition = event[page];
   scrollOffset = viewportRef.value[scroll];
@@ -287,7 +286,7 @@ onUpdated(update);
 </template>
 
 <style lang="scss">
-.atomic-scrollbar {
+.atomic-scrollbar {  
   position: relative;
   overflow: hidden;
 

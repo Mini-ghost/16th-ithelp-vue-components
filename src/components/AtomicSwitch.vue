@@ -26,7 +26,7 @@ interface AtomicSwitchProps {
 }
 
 interface AtomicSwitchEmits {
-  (type: 'update:modelValue', event: T | undefined): void;
+  (event: 'update:modelValue', value: T | undefined): void;
 }
 
 const props = withDefaults(defineProps<AtomicSwitchProps>(), {
@@ -101,6 +101,7 @@ const inputAttrs = computed(() => {
       :name="name"
       role="switch"
       type="checkbox"
+      @click.stop
     >
     <span class="atomic-switch__track">
       <span class="atomic-switch__thumb" />
@@ -137,7 +138,6 @@ const inputAttrs = computed(() => {
 
   &__text {
     align-self: center;
-    transition-property: color;
 
     &--active {
       padding-left: 8px;
@@ -193,6 +193,10 @@ const inputAttrs = computed(() => {
     box-shadow: 1px 1px 0 #00000026;
     transform: translateX(var(--switch-thumb-translate, 0));
     transition-property: transform;
+  }
+
+  &__text {
+    transition-property: color
   }
 
   &:has(&__input:checked) &__text--active,
