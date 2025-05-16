@@ -2,7 +2,7 @@ import { inject, shallowReactive } from 'vue';
 import type { ComponentInternalInstance, InjectionKey, ObjectPlugin } from 'vue';
 import toUnit from '~/utils/toUnit';
 
-type Popup = ComponentInternalInstance
+type Popup = ComponentInternalInstance;
 interface PopupsManager {
   add: (popup: Popup) => number
   remove: (popup: Popup) => number

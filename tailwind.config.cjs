@@ -1,4 +1,4 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
+const defaultTheme = require('tailwindcss/defaultTheme');
 
 const EXTEND_SPACING = {
   ...Object.fromEntries(
@@ -13,15 +13,15 @@ const EXTEND_SPACING = {
       `${space * 0.25}rem`,
     ]),
   ),
-}
+};
 
 const OVERRIDE_OPACITY = Object.fromEntries(
   Array.from({ length: 21 }, (_, i) => {
-    const key = i * 5
-    const value = key / 100
-    return [key, value]
+    const key = i * 5;
+    const value = key / 100;
+    return [key, value];
   }),
-)
+);
 
 /** @type {import('tailwindcss').Config} */
 module.exports = {
@@ -68,4 +68,4 @@ module.exports = {
       },
     },
   },
-}
+};

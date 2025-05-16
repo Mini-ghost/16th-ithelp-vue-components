@@ -10,14 +10,12 @@ export default function createResizeObserver() {
   const callbacks = new Map<Element, CallbackFn>();
 
   const observe: ObserveFn = (element, callback) => {
-    if (!observer) {
-      observer = new ResizeObserver(entries => {
-        for (const entry of entries) {
-          const callback = callbacks.get(entry.target);
-          callback?.();
-        }
-      });
-    }
+    observer ||= new ResizeObserver(entries => {
+      for (const entry of entries) {
+        const callback = callbacks.get(entry.target);
+        callback?.();
+      }
+    });
 
     callbacks.set(element, callback);
     observer.observe(element);

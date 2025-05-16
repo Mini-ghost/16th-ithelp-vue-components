@@ -1,6 +1,7 @@
-import pluginVue from 'eslint-plugin-vue'
-import parserVue from 'vue-eslint-parser'
-import typeScriptParser from '@typescript-eslint/parser'
+import pluginVue from 'eslint-plugin-vue';
+import parserVue from 'vue-eslint-parser';
+import typeScriptParser from '@typescript-eslint/parser';
+import stylistic from '@stylistic/eslint-plugin';
 
 /**
  * @type {import('eslint').Linter.Config}
@@ -8,8 +9,8 @@ import typeScriptParser from '@typescript-eslint/parser'
 export default [
   {
     plugins: {
-      vue: pluginVue
-    }
+      vue: pluginVue,
+    },
   },
   {
     files: ['**/*.ts', '**/*.vue'],
@@ -52,6 +53,12 @@ export default [
       'comma-dangle': ['error', 'always-multiline'],
       'padded-blocks': ['error', 'never'],
 
+      'logical-assignment-operators': [
+        'error',
+        'always',
+        { enforceForIfStatements: true },
+      ],
+
       'space-before-function-paren': [
         'error',
         {
@@ -60,8 +67,49 @@ export default [
           asyncArrow: 'always',
         },
       ],
-    }
+    },
   },
+
+  // @stylistic
+  {
+    plugins: {
+      '@stylistic': stylistic,
+    },
+    rules: {
+      '@stylistic/arrow-parens': 'off',
+      '@stylistic/arrow-spacing': ['error', { after: true, before: true }],
+      '@stylistic/comma-dangle': ['error', 'always-multiline'],
+      '@stylistic/comma-spacing': ['error', { after: true, before: false }],
+      '@stylistic/comma-style': ['error', 'last'],
+      '@stylistic/computed-property-spacing': [
+        'error',
+        'never',
+        { enforceForClassMembers: true },
+      ],
+      '@stylistic/dot-location': ['error', 'property'],
+      '@stylistic/eol-last': ['error', 'always'],
+      '@stylistic/indent': 'off',
+      '@stylistic/indent-binary-ops': 'off',
+      '@stylistic/key-spacing': 'error',
+      '@stylistic/keyword-spacing': 'error',
+      '@stylistic/linebreak-style': ['error', 'unix'],
+      '@stylistic/no-multiple-empty-lines': ['error', { max: 1 }],
+      '@stylistic/object-curly-spacing': ['error', 'always'],
+      '@stylistic/padded-blocks': ['error', 'never'],
+      '@stylistic/quotes': ['error', 'single'],
+      '@stylistic/semi': ['error', 'always'],
+
+      // https://github.com/prettier/prettier/issues/3845
+      '@stylistic/space-before-function-paren': 'off',
+      '@stylistic/space-infix-ops': 'error',
+      '@stylistic/template-curly-spacing': 'error',
+    },
+  },
+
+  ...pluginVue.configs['flat/essential'],
+  ...pluginVue.configs['flat/recommended'],
+  ...pluginVue.configs['flat/strongly-recommended'],
+
   {
     files: ['**/*.vue'],
     languageOptions: {
@@ -70,21 +118,18 @@ export default [
         extraFileExtensions: ['.vue'],
         parser: typeScriptParser,
         sourceType: 'module',
-      }
+      },
     },
     rules: {
-      ...pluginVue.configs['vue3-essential'].rules,
-      ...pluginVue.configs['vue3-strongly-recommended'].rules,
-      ...pluginVue.configs['vue3-recommended'].rules,
-
       'vue/multi-word-component-names': 'off',
+      'vue/no-required-prop-with-default': 'off',
 
       'vue/block-order': ['error', {
         order: ['script', 'template', 'style'],
       }],
 
       'vue/component-name-in-template-casing': ['error', 'PascalCase'],
-      'vue/multiline-html-element-content-newline': ['error',{
+      'vue/multiline-html-element-content-newline': ['error', {
         ignoreWhenEmpty: true,
         ignores: ['pre', 'textarea'],
         allowEmptyLines: false,
@@ -144,7 +189,7 @@ export default [
         {
           multiline: 'always',
           singleline: 'always',
-        }
+        },
       ],
 
       'vue/v-on-event-hyphenation': [
@@ -167,6 +212,6 @@ export default [
           ],
         },
       ],
-    }
-  }
-]
+    },
+  },
+];

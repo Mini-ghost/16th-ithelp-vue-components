@@ -5,7 +5,7 @@ import toKebabCase from '~/utils/toKebabCase';
 
 export default function useControlled<
   P extends Record<string, any>,
-  K extends keyof P
+  K extends keyof P,
 >(props: P, key: K) {
   const instance = getCurrentInstance();
 

@@ -1,6 +1,7 @@
 import '~/assets/scss/main.scss';
 
 import { createRouter, createWebHistory } from 'vue-router/auto';
+import { routes } from 'vue-router/auto-routes';
 
 import { createApp } from 'vue';
 import App from './App.vue';
@@ -12,6 +13,7 @@ const toasts = createToastsManager();
 
 const router = createRouter({
   history: createWebHistory(),
+  routes,
 });
 
 const app = createApp(App);

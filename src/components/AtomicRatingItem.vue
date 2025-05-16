@@ -146,6 +146,6 @@ const onClick = () => {
     :name="name ?? id"
     type="radio"
     :value="value"
-    @click.stop="onClick"
+    @click="onClick"
   >
 </template>

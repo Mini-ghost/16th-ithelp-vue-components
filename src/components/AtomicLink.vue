@@ -8,7 +8,7 @@ async function preloadRouteComponents(
   const { path, matched } = router.resolve(to);
 
   if (!matched.length) return;
-  if (!router._routePreloaded) router._routePreloaded = new Set();
+  router._routePreloaded ||= new Set();
   if (router._routePreloaded.has(path)) return;
 
   router._routePreloaded.add(path);

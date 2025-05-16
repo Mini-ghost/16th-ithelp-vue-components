@@ -72,5 +72,5 @@ export function previousItem(
     return item.previousElementSibling as HTMLElement;
   }
 
-  return lastChild(container) ;
+  return lastChild(container); 
 }

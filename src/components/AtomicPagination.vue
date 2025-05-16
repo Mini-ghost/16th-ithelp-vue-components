@@ -75,7 +75,7 @@ interface AtomicPaginationEmits {
 }
 
 const props = withDefaults(defineProps<AtomicPaginationProps>(), {
-  perPage: 50,
+  perPage: 10,
   boundaryCount: 1,
   siblingCount: 1,
 });
