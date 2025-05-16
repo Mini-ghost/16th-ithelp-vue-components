@@ -14,7 +14,7 @@ function scrollIntoView(element: HTMLElement | undefined) {
 </script>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, watch } from 'vue';
+import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
 
 import ArrowSvg from '~/assets/svg/arrow.svg?component';
 import AtomicFormField, {
@@ -72,9 +72,9 @@ const id = `field-${Math.round(Math.random() * 1e5)}`;
 const fieldProps = useFormFieldProps(() => props);
 
 const active = ref(false);
-const buttonRef = ref<HTMLElement>();
-const filterRef = ref<HTMLInputElement>();
-const menuRef = ref<HTMLElement>();
+const buttonRef = useTemplateRef('buttonRef');
+const filterRef = useTemplateRef('filterRef');
+const menuRef = useTemplateRef('menuRef');
 
 const isControlled = useControlled(props, 'modelValue');
 

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number | symbol">
-import { computed, inject, ref, watch } from 'vue';
+import { computed, inject, ref, useTemplateRef, watch } from 'vue';
 
 import { AtomicAccordionContext } from './AtomicAccordion.vue';
 
@@ -56,7 +56,7 @@ const isActive = computed({
 
 const onSummaryClick = () => (isActive.value = !isActive.value);
 
-const contentRef = ref<HTMLElement>();
+const contentRef = useTemplateRef('contentRef');
 
 const unWatch = watch(contentRef, content => {
   if (!content) return;

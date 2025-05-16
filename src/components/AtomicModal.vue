@@ -7,6 +7,7 @@ import {
   onUnmounted,
   ref,
   useAttrs,
+  useTemplateRef,
   watch,
 } from 'vue';
 
@@ -43,7 +44,7 @@ const instance = getCurrentInstance()!;
 
 const popups = usePopupsManager();
 
-const rootRef = ref<HTMLElement>();
+const rootRef = useTemplateRef('rootRef');
 
 const modelValueWritable = computed({
   get() {

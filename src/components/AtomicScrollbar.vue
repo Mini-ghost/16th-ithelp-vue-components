@@ -24,7 +24,7 @@ type OrientationKey = keyof Orientation;
 </script>
 
 <script setup lang="ts">
-import { computed, onUpdated, ref } from 'vue';
+import { computed, onUpdated, ref, useTemplateRef } from 'vue';
 import useResizeObserver from '~/composables/useResizeObserver';
 
 interface AtomicScrollbarProps {
@@ -38,7 +38,7 @@ const id = `scrollbar-${Math.round(Math.random() * 1e5)}`;
 const active = ref(false);
 const dragging = ref(false);
 
-const viewportRef = ref<HTMLElement>();
+const viewportRef = useTemplateRef('viewportRef');
 
 let time: ReturnType<typeof setTimeout>;
 

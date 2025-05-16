@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends any">
-import { computed, onMounted, onUpdated, ref, shallowRef, watch } from 'vue';
+import { computed, onMounted, onUpdated, ref, shallowRef, useTemplateRef, watch } from 'vue';
 
 import AtomicFormLabelField, {
   useFormLabelFieldProps,
@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<AtomicCheckboxProps>(), {
 
 const emit = defineEmits<AtomicCheckboxEmits>();
 
-const inputRef = ref<HTMLInputElement>();
+const inputRef = useTemplateRef('inputRef');
 
 const filedProps = useFormLabelFieldProps(() => ({
   ...props,

@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="Value extends string | number | symbol, Context">
-import { ref } from 'vue';
+import { computed, ref, shallowRef, useTemplateRef } from 'vue';
 
 import type { Slot } from 'vue';
 import type { ComponentProps } from 'vue-component-type-helpers';
@@ -30,15 +30,21 @@ withDefaults(defineProps<AtomicDropdownProps>(), {
 
 const slots = defineSlots<AtomicPopoverSlots>();
 
-const arrowRef = ref<HTMLElement>();
+const arrowRef = useTemplateRef('arrowRef');
+
+const arrow = computed(() => {
+  return arrowRef.value
+    ? {
+        element: arrowRef.value,
+        padding: 4,
+      }
+    : undefined;
+});
 </script>
 
 <template>
   <AtomicPopover
-    :arrow="arrowRef && {
-      element: arrowRef,
-      padding: 4,
-    }"
+    :arrow="arrow"
     :disabled="disabled"
     :offset="offset"
     :placement="placement"

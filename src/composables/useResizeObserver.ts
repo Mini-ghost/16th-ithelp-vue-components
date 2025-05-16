@@ -5,7 +5,7 @@ import type { MaybeRefOrGetter } from 'vue';
 import createResizeObserver from '~/helpers/createResizeObserver';
 import toArray from '~/utils/toArray';
 
-type MaybeElementRef = MaybeRefOrGetter<Element | undefined>;
+type MaybeElementRef = MaybeRefOrGetter<Element | undefined | null>;
 
 const UNOBSERVE＿KEY = Symbol('__unobserve');
 
@@ -14,7 +14,7 @@ export default function useResizeObserver(
   callback: () => void,
 ) {
   type Target = Element & { [UNOBSERVE＿KEY]?: () => void };
-  const targets = computed<Array<Target | undefined>>(() => {
+  const targets = computed<Array<Target | undefined | null>>(() => {
     return toArray(element).map(el => toValue(el));
   });
 

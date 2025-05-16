@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="Value extends string | number | symbol, Context">
-import { computed, defineComponent, ref, withDirectives } from 'vue';
+import { computed, defineComponent, ref, shallowRef, useTemplateRef, withDirectives } from 'vue';
 
 import AtomicPopover from '~/components/AtomicPopover.vue';
 import { moveFocus, nextItem, previousItem } from '~/utils/dom';
@@ -45,8 +45,8 @@ const slots = defineSlots<AtomicPopoverSlots>();
 const active = ref(false);
 const close = () => (active.value = false);
 
-const referenceRef = ref<HTMLElement>();
-const menuRef = ref<HTMLElement>();
+const referenceRef = shallowRef<HTMLElement>();
+const menuRef = useTemplateRef('menuRef');
 
 const ReferenceComponent = defineComponent({
   name: 'ReferenceComponent',

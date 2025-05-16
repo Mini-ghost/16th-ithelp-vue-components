@@ -34,6 +34,8 @@ import {
   onMounted,
   onUnmounted,
   ref,
+  shallowRef,
+  useTemplateRef,
   watch,
   withDirectives,
 } from 'vue';
@@ -128,8 +130,8 @@ const close = () => {
   modelValueWritable.value = false;
 };
 
-const referenceRef = ref<HTMLElement>();
-const popoverRef = ref<HTMLElement>();
+const referenceRef = shallowRef<HTMLElement>();
+const popoverRef = useTemplateRef('popoverRef');
 
 const { floatingStyles, middlewareData, placement } = useFloating(
   referenceRef,

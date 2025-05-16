@@ -30,7 +30,7 @@ async function preloadRouteComponents(
 
 <script setup lang="ts">
 import { hasProtocol } from 'ufo';
-import { computed, onBeforeUnmount, onMounted, ref } from 'vue';
+import { computed, onBeforeUnmount, onMounted, shallowRef } from 'vue';
 import { RouterLink, useRouter } from 'vue-router';
 
 import type { RouteLocationRaw, Router } from 'vue-router';
@@ -52,7 +52,7 @@ const props = withDefaults(defineProps<AtomicLinkProps>(), {
 
 const router = useRouter();
 
-const linkRef = ref<HTMLElement>();
+const linkRef = shallowRef<HTMLElement>();
 
 // Resolves `to` value if it's a route location object
 // converts `'''` to `null` to prevent the attribute from being added as empty (`href=""`)
