@@ -19,7 +19,7 @@ export function useFormFieldProps(
 </script>
 
 <script setup lang="ts">
-import { computed, toValue } from 'vue';
+import { computed, toValue, useId } from 'vue';
 
 import type { MaybeRefOrGetter } from 'vue';
 
@@ -47,7 +47,8 @@ const props = withDefaults(defineProps<AtomicFormFieldProps>(), {
   message: undefined,
 });
 
-const id = computed(() =>  props.id || `field-${Math.round(Math.random() * 1e5)}`);
+const _id = useId();
+const id = computed(() =>  props.id || `field-${_id}`);
 
 const rootStyle = computed(() => {
   const { labelWidth, hideLabel } = props;

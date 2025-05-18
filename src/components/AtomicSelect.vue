@@ -14,7 +14,7 @@ function scrollIntoView(element: HTMLElement | undefined) {
 </script>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, useTemplateRef, watch } from 'vue';
+import { computed, nextTick, ref, useId, useTemplateRef, watch } from 'vue';
 
 import ArrowSvg from '~/assets/svg/arrow.svg?component';
 import AtomicFormField, {
@@ -67,7 +67,7 @@ const props = withDefaults(defineProps<AtomicSelectProps>(), {
 
 const emit = defineEmits<AtomicSelectEmits>();
 
-const id = `field-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 
 const fieldProps = useFormFieldProps(() => props);
 

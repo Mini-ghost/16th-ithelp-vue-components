@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, useId } from 'vue';
 
 import CloseSvg from '~/assets/svg/close.svg?component';
 import AtomicButton from '~/components/AtomicButton.vue';
@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<AtomicDialogProps>(), {
 
 const emit = defineEmits<AtomicDialogEmits>();
 
-const id = `dialog-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 
 const { translate, isDragging, onDragStart } = useDrag(() => {
   return props.draggable || !!props.fullscreen;

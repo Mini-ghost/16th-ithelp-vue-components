@@ -18,7 +18,7 @@ export function defineTabs<T>(tabs: MaybeRefOrGetter<AtomicTabsItem<T>[]>) {
 </script>
 
 <script setup lang="ts" generic="T">
-import { computed, provide, toRef } from 'vue';
+import { computed, provide, toRef, useId } from 'vue';
 
 import type { ComputedRef, InjectionKey, MaybeRefOrGetter, Ref } from 'vue';
 
@@ -74,7 +74,7 @@ const props = withDefaults(defineProps<AtomicTabsProps>(), {
 
 const emit = defineEmits<AtomicTabsEmits>();
 
-const id = `tab-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 
 const tabs = computed(() => {
   return props.items.map(item => {

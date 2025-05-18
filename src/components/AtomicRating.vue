@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed, ref } from 'vue';
+import { computed, ref, useId } from 'vue';
 
 import AtomicRatingItem from '~/components/AtomicRatingItem.vue';
 import useControlled from '~/composables/useControlled';
@@ -57,7 +57,7 @@ const props = withDefaults(defineProps<AtomicRatingProps>(), {
 
 const emit = defineEmits<AtomicRatingEmits>();
 
-const id = Math.random().toString(36).slice(2);
+const id = useId();
 
 const isControlled = useControlled(props, 'modelValue');
 

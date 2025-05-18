@@ -35,6 +35,7 @@ import {
   onUnmounted,
   ref,
   shallowRef,
+  useId,
   useTemplateRef,
   watch,
   withDirectives,
@@ -106,7 +107,7 @@ const emit = defineEmits<AtomicPopoverEmit>();
 
 const slots = defineSlots<AtomicPopoverSlots>();
 
-const id = `popover-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 
 const instance = getCurrentInstance()!;
 const popups = usePopupsManager();

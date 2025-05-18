@@ -24,7 +24,7 @@ type OrientationKey = keyof Orientation;
 </script>
 
 <script setup lang="ts">
-import { computed, onUpdated, ref, useTemplateRef } from 'vue';
+import { computed, onUpdated, ref, useId, useTemplateRef } from 'vue';
 import useResizeObserver from '~/composables/useResizeObserver';
 
 interface AtomicScrollbarProps {
@@ -33,7 +33,7 @@ interface AtomicScrollbarProps {
 
 const props = withDefaults(defineProps<AtomicScrollbarProps>(), {});
 
-const id = `scrollbar-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 
 const active = ref(false);
 const dragging = ref(false);

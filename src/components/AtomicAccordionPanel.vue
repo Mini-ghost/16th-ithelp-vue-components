@@ -1,5 +1,5 @@
 <script setup lang="ts" generic="T extends string | number | symbol">
-import { computed, inject, ref, useTemplateRef, watch } from 'vue';
+import { computed, inject, ref, useId, useTemplateRef, watch } from 'vue';
 
 import { AtomicAccordionContext } from './AtomicAccordion.vue';
 
@@ -34,7 +34,7 @@ const context = inject<AtomicAccordionValue<T> | undefined>(
   undefined,
 );
 
-const id = `accordion-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 
 const internal = ref(!!props.modelValue);
 const isActive = computed({

@@ -15,7 +15,7 @@ export function useFormLabelFieldProps(
 </script>
 
 <script setup lang="ts">
-import { computed, toValue } from 'vue';
+import { computed, toValue, useId } from 'vue';
 
 import type { MaybeRefOrGetter } from 'vue';
 
@@ -35,7 +35,7 @@ withDefaults(defineProps<AtomicFormLabelFieldProps>(), {
   message: undefined,
 });
 
-const id = `field-${Math.round(Math.random() * 1e5)}`;
+const id = useId();
 </script>
 
 <template>
